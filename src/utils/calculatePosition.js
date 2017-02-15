@@ -56,7 +56,7 @@ function getLeftDelta(left, overlayWidth, container, padding) {
 }
 
 export default function calculatePosition(
-  placement, overlayNode, target, container, padding
+  placement, verticalPosition, overlayNode, target, container, padding
 ) {
   const childOffset = container.tagName === 'BODY' ?
     getOffset(target) : getPosition(target, container);
@@ -64,7 +64,7 @@ export default function calculatePosition(
   const { height: overlayHeight, width: overlayWidth } =
     getOffset(overlayNode);
 
-  let positionLeft, positionTop, arrowOffsetLeft, arrowOffsetTop;
+  let positionLeft, positionTop, positionBottom, arrowOffsetLeft, arrowOffsetTop;
 
   if (placement === 'left' || placement === 'right') {
     positionTop = childOffset.top + (childOffset.height - overlayHeight) / 2;
@@ -86,10 +86,23 @@ export default function calculatePosition(
   } else if (placement === 'top' || placement === 'bottom') {
     positionLeft = childOffset.left + (childOffset.width - overlayWidth) / 2;
 
-    if (placement === 'top') {
-      positionTop = childOffset.top - overlayHeight;
+    if (verticalPosition === 'top') {
+        if (placement === 'top') {
+            positionTop = childOffset.top - overlayHeight;
+        } else {
+            positionTop = childOffset.top + childOffset.height;
+        }
+    }
+    else if (verticalPosition === 'bottom') {
+        if (placement === 'top') {
+            positionBottom = window.innerHeight - childOffset.top;
+        } else {
+            positionBottom = window.innerHeight - (overlayHeight + childOffset.top + childOffset.height)
+        }
     } else {
-      positionTop = childOffset.top + childOffset.height;
+        throw new Error(
+            `calcOverlayPosition(): No such verticalPosition of "${verticalPosition}" found.`
+        );
     }
 
     const leftDelta = getLeftDelta(
@@ -106,5 +119,5 @@ export default function calculatePosition(
     );
   }
 
-  return { positionLeft, positionTop, arrowOffsetLeft, arrowOffsetTop };
+  return { positionLeft, positionTop, positionBottom, arrowOffsetLeft, arrowOffsetTop };
 }

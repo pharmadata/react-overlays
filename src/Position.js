@@ -23,6 +23,7 @@ class Position extends React.Component {
     this.state = {
       positionLeft: 0,
       positionTop: 0,
+      positionBottom: 0,
       arrowOffsetLeft: null,
       arrowOffsetTop: null
     };
@@ -42,13 +43,13 @@ class Position extends React.Component {
   componentDidUpdate(prevProps) {
     if (this._needsFlush) {
       this._needsFlush = false;
-      this.maybeUpdatePosition(this.props.placement !== prevProps.placement);
+      this.maybeUpdatePosition(this.props.placement !== prevProps.placement || this.props.verticalPosition !== prevProps.verticalPosition);
     }
   }
 
   render() {
     const {children, className, ...props} = this.props;
-    const {positionLeft, positionTop, ...arrowPosition} = this.state;
+    const {positionLeft, positionTop, positionBottom, ...arrowPosition} = this.state;
 
     // These should not be forwarded to the child.
     delete props.target;
@@ -66,11 +67,13 @@ class Position extends React.Component {
         // and `props.style`.
         positionLeft,
         positionTop,
+        positionBottom,
         className: classNames(className, child.props.className),
         style: {
           ...child.props.style,
           left: positionLeft,
-          top: positionTop
+          top: positionTop,
+          bottom: positionBottom
         }
       }
     );
@@ -103,6 +106,7 @@ class Position extends React.Component {
       this.setState({
         positionLeft: 0,
         positionTop: 0,
+        positionBottom: 0,
         arrowOffsetLeft: null,
         arrowOffsetTop: null
       });
@@ -117,6 +121,7 @@ class Position extends React.Component {
 
     this.setState(calculatePosition(
       this.props.placement,
+      this.props.verticalPosition,
       overlay,
       target,
       container,
@@ -149,6 +154,10 @@ Position.propTypes = {
    */
   placement: React.PropTypes.oneOf(['top', 'right', 'bottom', 'left']),
   /**
+   * How the overlay should be positioned using css from the top or the bottom
+   */
+  verticalPosition: React.PropTypes.oneOf(['top', 'bottom']),
+  /**
    * Whether the position should be changed on each update
    */
   shouldUpdatePosition: React.PropTypes.bool
@@ -159,6 +168,7 @@ Position.displayName = 'Position';
 Position.defaultProps = {
   containerPadding: 0,
   placement: 'right',
+  verticalPosition: 'top',
   shouldUpdatePosition: false
 };
 
