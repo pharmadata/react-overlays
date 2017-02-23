@@ -95,9 +95,9 @@ export default function calculatePosition(
     }
     else if (verticalPosition === 'bottom') {
         if (placement === 'top') {
-            positionBottom = window.innerHeight - childOffset.top;
+            positionBottom = container.clientHeight - childOffset.top;
         } else {
-            positionBottom = window.innerHeight - (overlayHeight + childOffset.top + childOffset.height)
+            positionBottom = container.clientHeight - (overlayHeight + childOffset.top + childOffset.height)
         }
     } else {
         throw new Error(
