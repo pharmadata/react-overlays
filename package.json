@@ -1,6 +1,6 @@
 {
   "name": "react-overlays-pd",
-  "version": "0.6.12",
+  "version": "v0.6.13",
   "description": "Utilities for creating robust overlay components",
   "author": "Jason Quense <monastic.panic@gmail.com>",
   "repository": "pharmadata/react-overlays",
