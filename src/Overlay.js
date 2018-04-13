@@ -105,6 +105,11 @@ Overlay.propTypes = {
   ...Portal.propTypes,
   ...Position.propTypes,
 
+   /**
+   * Set a custom ID
+   */
+   id: React.PropTypes.String,
+
   /**
    * Set the visibility of the Overlay
    */

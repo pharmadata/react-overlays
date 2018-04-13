@@ -58,11 +58,17 @@ function getLeftDelta(left, overlayWidth, container, padding) {
 export default function calculatePosition(
   placement, verticalPosition, overlayNode, target, container, padding
 ) {
-  const childOffset = container.tagName === 'BODY' ?
-    getOffset(target) : getPosition(target, container);
+  let childOffset = container.tagName === 'BODY' ? getOffset(target) : getPosition(target, container);
 
-  const { height: overlayHeight, width: overlayWidth } =
-    getOffset(overlayNode);
+  const { height: overlayHeight, width: overlayWidth } = getOffset(overlayNode);
+
+  // Overflowing content
+  if (target.scrollWidth > target.offsetWidth) {
+      childOffset.width = target.offsetWidth
+  }
+  else if (target.parentElement.scrollWidth > target.parentElement.offsetWidth) {
+      childOffset.width = target.parentElement.offsetWidth;
+  }
 
   let positionLeft, positionTop, positionBottom, arrowOffsetLeft, arrowOffsetTop;
 
